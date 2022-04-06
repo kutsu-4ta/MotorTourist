@@ -19,7 +19,10 @@ class _GoogleMapsState extends State<GoogleMaps> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Flutter Maps"),
+        elevation: 30,
+        backgroundColor: Colors.transparent,
+        iconTheme: IconThemeData(color: Colors.green),
+        title: Text("Flutter Maps", style: TextStyle(color: Colors.green)),
       ),
       body: Container(
         child: GoogleMap(
