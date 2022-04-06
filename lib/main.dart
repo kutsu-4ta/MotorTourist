@@ -11,7 +11,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Flutter Maps',
       theme: ThemeData(
-        primarySwatch: Colors.deepPurple,
+        primarySwatch: Colors.green,
       ),
       home: Contents(),
       // home: FlutterLogin(
@@ -75,15 +75,3 @@ class Contents extends StatelessWidget {
     );
   }
 }
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return MaterialApp(
-//       title: 'Flutter Maps',
-//       theme: ThemeData(
-//         primarySwatch: Colors.blue,
-//       ),
-//       home: GoogleMaps(),
-//     );
-//   }
-// }

@@ -17,15 +17,14 @@ class _GoogleMapsState extends State<GoogleMaps> {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      home: Scaffold(
-        appBar: AppBar(
-          title: Text("Flutter Maps"),
-        ),
-        body: GoogleMap(
+    return Scaffold(
+      appBar: AppBar(
+        title: Text("Flutter Maps"),
+      ),
+      body: Container(
+        child: GoogleMap(
           onMapCreated: _onMapCreated,
           initialCameraPosition: CameraPosition(
-            // 最初のカメラ位置
             target: LatLng(34.643208, 134.997586),
             zoom: 17.0,
           ),
