@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'google_maps.dart';
+import 'dart:async';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 void main() => runApp(MyApp());
 
@@ -13,17 +15,35 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.green,
       ),
-      home: Home(),
-      // home: FlutterLogin(
-      //   onLogin: (LoginData) {},
-      //   onRecoverPassword: (String) {},
-      // ),
+      home: Container(
+        child: Home(),
+      ),
     );
   }
 }
 
-class Home extends StatelessWidget {
+class Home extends StatefulWidget {
   @override
+  _HomeState createState() => _HomeState();
+}
+
+class _HomeState extends State<Home> {
+  int _selectedIndex = 0;
+
+  // 表示する Widget の一覧
+  static List<Widget> _pageList = [
+    Text('A'),
+    GoogleMaps(),
+    Text('C'),
+  ];
+
+  // タップ時の処理
+  void _onItemTapped(int index) {
+    setState(() {
+      _selectedIndex = index;
+    });
+  }
+
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
@@ -32,124 +52,71 @@ class Home extends StatelessWidget {
         iconTheme: IconThemeData(color: Colors.green),
         title: Text("MotorTourist", style: TextStyle(color: Colors.green)),
       ),
-      body: Container(
-        width: double.infinity,
-        child: Container(
-          child: Column(
-            children: [_ImageArea(), _titleArea(), _menuArea(context)],
+      body: _pageList[_selectedIndex],
+      bottomNavigationBar: BottomNavigationBar(
+        items: const <BottomNavigationBarItem>[
+          BottomNavigationBarItem(
+            icon: Icon(Icons.two_wheeler),
+            title: Text('Machine'),
           ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.navigation),
+            title: Text('Go'),
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.share),
+            title: Text('Share'),
+          ),
+        ],
+        currentIndex: _selectedIndex,
+        onTap: _onItemTapped,
+      ),
+    );
+  }
+}
+
+class CustomPage extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      child: Center(
+        child: Container(
+          width: 200,
+          height: 200,
+          decoration: BoxDecoration(
+              borderRadius: BorderRadius.all(Radius.circular(20.0))),
+          child: Center(),
         ),
       ),
     );
   }
 }
 
-// イメージエリア
-Widget _ImageArea() {
-  return Container(
-      margin: EdgeInsets.all(16.0),
-      child: Row(
-        // 1行目
-        children: <Widget>[
-          Expanded(
-            child: Column(
-              children: <Widget>[
-                Container(
-                  // 3.1.1行目
-                  margin: const EdgeInsets.only(bottom: 4.0),
-                  child: Image.asset('images/home.png'),
-                ),
-                Container(
-                  // 3.1.2行目
-                  child: Text(
-                    'おかえりなさい。',
-                    style: TextStyle(fontSize: 12.0, color: Colors.grey),
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ],
-      ));
+class GoogleMaps extends StatefulWidget {
+  @override
+  _GoogleMapsState createState() => _GoogleMapsState();
 }
 
-// タイトルエリア
-Widget _titleArea() {
-  return Container(
-      margin: EdgeInsets.all(16.0),
-      child: Row(
-        // 1行目
-        children: <Widget>[
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                Container(
-                  // 3.1.1行目
-                  margin: const EdgeInsets.only(bottom: 4.0),
-                  child: Text(
-                    'お腹すいた',
-                    style:
-                        TextStyle(fontWeight: FontWeight.bold, fontSize: 16.0),
-                  ),
-                ),
-                Container(
-                  // 3.1.2行目
-                  child: Text(
-                    '空腹は力なり',
-                    style: TextStyle(fontSize: 12.0, color: Colors.grey),
-                  ),
-                ),
-              ],
-            ),
-          ),
-          Icon(
-            // 2.2列目
-            Icons.star,
-            color: Colors.red,
-          ),
-          Text('41'), // 2.3列目
-        ],
-      ));
-}
+class _GoogleMapsState extends State<GoogleMaps> {
+  // 非同期処理のときはCompleterを渡す
+  Completer<GoogleMapController> _controller = Completer();
 
-Widget _menuArea(BuildContext context) {
-  return Container(
-      margin: const EdgeInsets.fromLTRB(16.0, 0.0, 16.0, 16.0),
-      child: Row(
-        // 1行目
-        crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        children: <Widget>[
-          _buildButtonColumn(Icons.two_wheeler, "Machine", context), // 2.1
-          _buildButtonColumn(Icons.near_me, "Go", context), // 2.2
-          _buildButtonColumn(Icons.share, "Log", context) // 2.3
-        ],
-      ));
-}
+  void _onMapCreated(GoogleMapController controller) {
+    _controller.complete(controller);
+  }
 
-Widget _buildButtonColumn(IconData icon, String label, BuildContext context) {
-  final color = Theme.of(context).primaryColor;
-
-  return Column(
-    mainAxisSize: MainAxisSize.min,
-    mainAxisAlignment: MainAxisAlignment.center,
-    children: <Widget>[
-      RaisedButton(
-          child: Column(
-            children: [
-              Icon(icon, color: color),
-              Text(
-                label,
-                style: TextStyle(
-                    fontSize: 12.0, fontWeight: FontWeight.w400, color: color),
-              ),
-            ],
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: Container(
+        child: GoogleMap(
+          onMapCreated: _onMapCreated,
+          initialCameraPosition: CameraPosition(
+            target: LatLng(34.643208, 134.997586),
+            zoom: 17.0,
           ),
-          onPressed: () {
-            Navigator.push(
-                context, MaterialPageRoute(builder: (context) => GoogleMaps()));
-          }),
-    ],
-  );
+        ),
+      ),
+    );
+  }
 }
