@@ -32,9 +32,9 @@ class _HomeState extends State<Home> {
 
   // 表示する Widget の一覧
   static List<Widget> _pageList = [
-    Text('A'),
     GoogleMaps(),
-    Text('C'),
+    Text('A'),
+    Text('B'),
   ];
 
   // タップ時の処理
@@ -56,12 +56,12 @@ class _HomeState extends State<Home> {
       bottomNavigationBar: BottomNavigationBar(
         items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(
-            icon: Icon(Icons.two_wheeler),
-            title: Text('Machine'),
-          ),
-          BottomNavigationBarItem(
             icon: Icon(Icons.navigation),
             title: Text('Go'),
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.two_wheeler),
+            title: Text('Machine'),
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.share),
