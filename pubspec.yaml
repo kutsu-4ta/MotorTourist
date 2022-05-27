@@ -65,10 +65,9 @@ flutter:
   # To add assets to your application, add an assets section, like this:
   # ディレクトリ指定で配下全部読める
   assets:
-    - images/splash.png
-    - images/home.png
-  #   - images/a_dot_burr.jpeg
-  #   - images/a_dot_ham.jpeg
+    - Images/Machine/
+    - Images/splash.png
+#    - Images/home.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.
